@@ -90,82 +90,88 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          PageView(
-            controller: _pageController,
-            onPageChanged: (index) {
-              setState(() {
-                _currentPage = index;
-              });
-            },
-            children: _buildPageContent(),
-          ),
-          Positioned(
-            bottom: 20.0,
-            left: 20.0,
-            right: 20.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _currentPage != 0
-                    ? TextButton(
-                        onPressed: () {
-                          _pageController.previousPage(
-                            duration: Duration(milliseconds: 400),
-                            curve: Curves.easeInOut,
-                          );
-                        },
-                        child: Text("Prev"),
-                      )
-                    : SizedBox.shrink(),
-                Row(
-                  children: List.generate(
-                    _buildPageContent().length,
-                    (index) => AnimatedContainer(
-                      duration: Duration(milliseconds: 300),
-                      margin: EdgeInsets.symmetric(horizontal: 3.0),
-                      height: 8.0,
-                      width: _currentPage == index ? 24.0 : 8.0,
-                      decoration: BoxDecoration(
-                        color: _currentPage == index
-                            ? Colors.black
-                            : Colors.grey,
-                        borderRadius: BorderRadius.circular(5.0),
+    return WillPopScope(
+      onWillPop: () async {
+        // Returning false prevents the app from going back.
+        return false;
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
+              },
+              children: _buildPageContent(),
+            ),
+            Positioned(
+              bottom: 20.0,
+              left: 20.0,
+              right: 20.0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _currentPage != 0
+                      ? TextButton(
+                          onPressed: () {
+                            _pageController.previousPage(
+                              duration: Duration(milliseconds: 400),
+                              curve: Curves.easeInOut,
+                            );
+                          },
+                          child: Text("Prev"),
+                        )
+                      : SizedBox.shrink(),
+                  Row(
+                    children: List.generate(
+                      _buildPageContent().length,
+                      (index) => AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        margin: EdgeInsets.symmetric(horizontal: 3.0),
+                        height: 8.0,
+                        width: _currentPage == index ? 24.0 : 8.0,
+                        decoration: BoxDecoration(
+                          color: _currentPage == index
+                              ? Colors.black
+                              : Colors.grey,
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    if (_currentPage == _buildPageContent().length - 1) {
-                      // Mark onboarding as complete
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.setBool('onboardingComplete', true);
-                      
-                      // Navigate to landing page
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => Landingpage()),
-                      );
-                    } else {
-                      _pageController.nextPage(
-                        duration: Duration(milliseconds: 400),
-                        curve: Curves.easeInOut,
-                      );
-                    }
-                  },
-                  child: Text(
-                    _currentPage == _buildPageContent().length - 1
-                        ? "Get Started"
-                        : "Next",
+                  TextButton(
+                    onPressed: () async {
+                      if (_currentPage == _buildPageContent().length - 1) {
+                        // Mark onboarding as complete
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool('onboardingComplete', true);
+                        
+                        // Navigate to landing page
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => Landingpage()),
+                        );
+                      } else {
+                        _pageController.nextPage(
+                          duration: Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                    child: Text(
+                      _currentPage == _buildPageContent().length - 1
+                          ? "Get Started"
+                          : "Next",
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
