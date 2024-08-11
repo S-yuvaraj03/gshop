@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gshop/data/repositories/fetch_data/fetchdata.dart';
 import 'package:gshop/features/shop/model/ProductModel.dart';
+import 'package:gshop/features/shop/screens/BottomNavigator/bottomNavigator.dart';
 import 'package:gshop/features/shop/screens/UI%20screen/Products/ProductPage.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -181,17 +182,14 @@ class _SearchfieldState extends State<Searchfield> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>NavigationMenu()));
+          },        
+        ),
         title: Row(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: GestureDetector(
-                child: Icon(Icons.arrow_back_ios),
-                onTap: () {
-                  Navigator.pushReplacementNamed(context, '/Navigator');
-                },
-              ),
-            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
