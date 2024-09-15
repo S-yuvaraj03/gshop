@@ -11,6 +11,7 @@ class Product {
   final String imageLink;
   final String? deliveryTime;
   final int? deliveryDays;
+  final int? Available_count;
 
   Product({
     required this.product_id,
@@ -25,6 +26,7 @@ class Product {
     required this.imageLink,
     this.deliveryTime,
     this.deliveryDays,
+    required this.Available_count,
   });
 
   factory Product.fromMap(Map<String, dynamic> data) {
@@ -41,6 +43,7 @@ class Product {
       imageLink: data['imageLink'] ?? '',
       deliveryTime: data['deliveryTime'],
       deliveryDays: data['deliveryDays'],
+      Available_count: data['Available_count']
     );
   }
 
@@ -58,6 +61,7 @@ class Product {
       'imageLink': imageLink,
       'deliveryTime': deliveryTime,
       'deliveryDays': deliveryDays,
+      'Available_count': Available_count
     };
   }
 

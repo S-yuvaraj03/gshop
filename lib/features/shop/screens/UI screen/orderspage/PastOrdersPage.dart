@@ -84,13 +84,7 @@ class PastOrdersPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(item.product.product_description),
-                                Row(
-                                  children: [
-                                    Text('Qty ${item.quantity}'),
-                                  ],
-                                ),
-                                Text(
-                                    'Delivery by ${item.product.deliveryDays} Days, time: ${item.product.deliveryTime}'),
+                                Text('Qty ${item.quantity} X ₹${item.product.product_offerprice}'),
                               ],
                             ),
                           );
@@ -98,12 +92,12 @@ class PastOrdersPage extends StatelessWidget {
                       ),
                       Divider(thickness: 1, height: 32),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Total',
+                          Text('Total Amount :',
                               style: TextStyle(
                                   fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
-                          Text('₹${totalAmount}',
+                          Text(' ₹${totalAmount}',
                               style: TextStyle(
                                   fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
                         ],

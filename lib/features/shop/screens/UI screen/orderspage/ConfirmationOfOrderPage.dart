@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
+import 'package:gshop/data/repositories/Product_service/ProductService.dart';
 import 'package:gshop/features/shop/screens/BottomNavigator/bottomNavigator.dart';
 import 'package:gshop/features/shop/screens/UI%20screen/orderspage/cart_bloc/cart_bloc.dart';
 import 'package:gshop/utils/constant/sizes.dart';
@@ -17,6 +18,18 @@ class ConfirmationOfOrderPage extends StatelessWidget {
     required this.cartItems,
     required this.deliveryAddress,
   });
+
+  // Method to update the available product count in the shop collection
+  Future<void> updateShopProducts() async {
+    ProductService productService = ProductService();
+
+    for (var cartItem in cartItems) {
+      await productService.updateProductAvailability(
+        cartItem.product.product_id, // Product ID
+        cartItem.quantity,           // Quantity purchased
+      );
+    }
+  }
 
   Future<void> saveOrderToFirestore(BuildContext context) async {
     final User? user = FirebaseAuth.instance.currentUser; // Get the logged-in user
@@ -103,6 +116,7 @@ class ConfirmationOfOrderPage extends StatelessWidget {
               color: Colors.black,
               onPressed: () async {
                 await saveOrderToFirestore(context);
+                await updateShopProducts(); // Update available products in shop collection
                 Navigator.push(
                   context,
                   MaterialPageRoute(

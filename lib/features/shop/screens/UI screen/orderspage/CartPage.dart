@@ -31,112 +31,129 @@ class CartPage extends StatelessWidget {
                       padding: EdgeInsets.all(8.0),
                       margin: EdgeInsets.symmetric(vertical: 4.0),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(child: Image.network(item.product.imageLink) ,height: kheight*0.15, width: kwidth*0.3,),
-                              SizedBox(width: 8.0),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      item.product.product_name,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: TSizes.fontLg,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                    SizedBox(height: 4.0),
-                                    Text(
-                                      item.product.product_description,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 3,
-                                    ),
-                                    SizedBox(height: 4.0),
-                                    Text(
-                                      '₹${item.product.product_offerprice} x ${item.quantity}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4.0),
-                                    Row(
-                                      children: [
-                                        StarRating(
-                                          rating: item.product.product_rating,
-                                          color: Colors.yellow.shade800,
-                                          starCount: 5,
-                                          iconsize: TSizes.iconSm,
-                                        ),
-                                        SizedBox(width: 8.0),
-                                        Text(
-                                          '${item.product.product_rating} (ratings)',
-                                          style: TextStyle(fontSize: TSizes.fontSm),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                            child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               children: [
-                                IconButton(
-                                  icon: Icon(Icons.remove),
-                                  onPressed: () {
-                                    if (item.quantity > 0) {
-                                      context
-                                          .read<CartBloc>()
-                                          .add(RemoveItem(item.product));
-                                    }
-                                  },
-                                ),
                                 SizedBox(
-                                  width: 8.0,
+                                  child: Image.network(item.product.imageLink),
+                                  height: kheight * 0.15,
+                                  width: kwidth * 0.3,
                                 ),
-                                Text('${item.quantity}'),
-                                SizedBox(
-                                  width: 8.0,
+                                SizedBox(width: 8.0),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.product.product_name,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: TSizes.fontLg,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                      SizedBox(height: 4.0),
+                                      Text(
+                                        item.product.product_description,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 3,
+                                      ),
+                                      SizedBox(height: 4.0),
+                                      Text(
+                                        '₹${item.product.product_offerprice} x ${item.quantity}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4.0),
+                                      Row(
+                                        children: [
+                                          StarRating(
+                                            rating: item.product.product_rating,
+                                            color: Colors.yellow.shade800,
+                                            starCount: 5,
+                                            iconsize: TSizes.iconSm,
+                                          ),
+                                          SizedBox(width: 8.0),
+                                          Text(
+                                            '${item.product.product_rating} (ratings)',
+                                            style: TextStyle(
+                                                fontSize: TSizes.fontSm),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(4.0),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.remove),
+                                        onPressed: () {
+                                          if (item.quantity > 0) {
+                                            context
+                                                .read<CartBloc>()
+                                                .add(RemoveItem(item.product));
+                                          }
+                                        },
+                                      ),
+                                      SizedBox(
+                                        width: 8.0,
+                                      ),
+                                      Text('${item.quantity}'),
+                                      SizedBox(
+                                        width: 8.0,
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.add),
+                                        onPressed: () {
+                                          if (item.quantity <
+                                              (item.product.Available_count ??
+                                                  0)) {
+                                            context
+                                                .read<CartBloc>()
+                                                .add(AddItem(item.product));
+                                          } else if (item.quantity >=
+                                              (item.product.Available_count ??
+                                                  0)) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                  content: Text(
+                                                      'Sorry for your inconvienence only ${item.product.Available_count} left')),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.add),
+                                  icon: Icon(Icons.delete),
                                   onPressed: () {
                                     context
                                         .read<CartBloc>()
-                                        .add(AddItem(item.product));
+                                        .add(DeleteItem(item.product));
                                   },
                                 ),
                               ],
                             ),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {
-                              context
-                                  .read<CartBloc>()
-                                  .add(DeleteItem(item.product));
-                            },
-                          ),
-                        ],
-                      ),
-                    ]
-                  ),
-                );
-              }
-            ),
+                          ]),
+                    );
+                  }),
           bottomNavigationBar: Container(
             padding: EdgeInsets.all(16.0),
             child: Row(
@@ -144,20 +161,25 @@ class CartPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // Text('Delivery Address: $deliveryAddress'),
-                Text('Total: ₹${cartState.totalPrice}', style: TextStyle(fontSize: TSizes.fontLg),),
+                Text(
+                  'Total: ₹${cartState.totalPrice}',
+                  style: TextStyle(fontSize: TSizes.fontLg),
+                ),
                 MaterialButton(
                   color: Colors.black,
                   onPressed: () {
                     Navigator.push(
-                    context,
+                      context,
                       MaterialPageRoute(
-                        builder: (context) => OrderReviewPage(
-                          confirmAddress: deliveryAddress,
-                        )
-                      ),
+                          builder: (context) => OrderReviewPage(
+                                confirmAddress: deliveryAddress,
+                              )),
                     );
                   },
-                  child: Text('Proceed to cart',style: TextStyle(color: Colors.white),),
+                  child: Text(
+                    'Proceed to cart',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),
