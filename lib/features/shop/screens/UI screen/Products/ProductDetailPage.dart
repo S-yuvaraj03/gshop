@@ -16,13 +16,13 @@ import 'package:gshop/utils/formatters/starratings.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Product product;
-  final Shop? shop;
+  final List<Shop>? shops;
   final List<Product> allProducts;
 
   const ProductDetailPage({
     Key? key,
     required this.product,
-    this.shop,
+    this.shops,
     required this.allProducts,
   }) : super(key: key);
 
@@ -116,6 +116,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             p.product_cateogory == widget.product.product_cateogory &&
             p != widget.product)
         .toList();
+
+    // Find the corresponding shop for the product
+    Shop? associatedShop;
+    if (widget.shops != null) {
+      try {
+        associatedShop = widget.shops!.firstWhere(
+          // (shop) => shop.shopid == shop.products.contains(product), // Match shopid with product's shopid
+          (shop) => shop.products.any((prod) => prod.product_id == widget.product.product_id),
+        );
+      } catch (e) {
+        debugPrint("No matching shop found for product: ${widget.product.product_name}");
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -226,13 +239,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ],
                   ),
                 ),
-                if (widget.shop != null) ...[
+                if (widget.shops != null) ...[
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Text(widget.shop!.shopename,
+                    child: Text("${associatedShop!.shopename}",
+                        
                         style: TextStyle(fontSize: TSizes.Lg)),
                   ),
                 ],
+                SizedBox(
+                  height: 20,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(onPressed: (){
@@ -412,7 +429,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ],
                 ),
               ),
-              KGridview(products:similarProducts), // Use the KGridview widget to display similar products
+              KGridview(products:similarProducts, shops: widget.shops,), // Use the KGridview widget to display similar products
             ],
           ],
         ),

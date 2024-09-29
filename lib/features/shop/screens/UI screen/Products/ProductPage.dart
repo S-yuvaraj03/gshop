@@ -7,13 +7,14 @@ import 'package:gshop/utils/formatters/starratings.dart';
 
 class ProductPage extends StatelessWidget {
   final Product product;
-  final Shop? shop;
+  final List<Shop>? shops;
   final List<Product> allProducts;
 
   ProductPage({
     Key? key,
     required this.product,
-    this.shop, required this.allProducts,
+    this.shops, 
+    required this.allProducts,
   }) : super(key: key);
 
   @override
@@ -27,7 +28,7 @@ class ProductPage extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductDetailPage(product: product, shop: shop, allProducts: allProducts,),
+            builder: (context) => ProductDetailPage(product: product, shops: shops, allProducts: allProducts,),
           ),
         );
       },

@@ -51,7 +51,7 @@ class HomeBody extends StatelessWidget {
               } else if (shopState is ShopError) {
                 return Center(child: Text('Error: ${shopState.message}'));
               } else if (shopState is ShopLoaded) {
-                final shop = shopState.shops.isNotEmpty ? shopState.shops.first : null;
+                final shop = shopState.shops.isNotEmpty ? shopState.shops : null;
                 return BlocBuilder<ProductBloc, ProductState>(
                   builder: (context, productState) {
                     if (productState is ProductLoading) {
@@ -60,7 +60,7 @@ class HomeBody extends StatelessWidget {
                       return Center(child: Text('Error: ${productState.message}'));
                     } else if (productState is ProductLoaded) {
                       final products = productState.products;
-                      return KGridview(products: products, shop: shop);
+                      return KGridview(products: products, shops: shop);
                     }
                     return Center(child: Text('No products available'));
                   },

@@ -8,7 +8,7 @@ import 'package:gshop/utils/constant/sizes.dart';
 
 class WishlistPage extends StatelessWidget {
   final List<Product>? allProducts;
-  final Shop? shop;
+  final List<Shop>? shop;
 
   const WishlistPage({
     Key? key,
@@ -50,7 +50,7 @@ class WishlistPage extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => ProductDetailPage(
                         product: product,
-                        shop: shop, // Pass null or shop if available
+                        // shop: shop, // Pass null or shop if available
                         allProducts: allProducts ?? [], // Pass an empty list or allProducts if available
                       ),
                     ),

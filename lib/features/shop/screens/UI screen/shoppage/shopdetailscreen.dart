@@ -317,7 +317,7 @@ class ShopDetailScreen extends StatelessWidget {
                   ),
                 ),
 
-            KGridview(products: shop.products),
+            KGridview(products: shop.products, shops: [],),
           ],
         ),
       ),

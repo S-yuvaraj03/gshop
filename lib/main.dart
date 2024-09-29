@@ -1,12 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gshop/AppEntrypoint.dart';
 import 'package:gshop/common/widgets/Notification.dart';
 import 'package:gshop/features/shop/screens/BottomNavigator/bottomNavigator.dart';
 import 'package:gshop/common/widgets/searchfield.dart';
-import 'package:gshop/features/shop/screens/Landinpage.dart';
-import 'package:gshop/features/shop/screens/OnboardingScreen.dart';
+import 'package:gshop/features/shop/screens/NetworkConnectivity/Connectivity_bloc/connectivity_bloc.dart';
+import 'package:gshop/features/shop/screens/NetworkConnectivity/connectivity_indicator.dart';
 import 'package:gshop/features/shop/screens/UI%20screen/Homepage/homepage.dart';
 import 'package:gshop/features/shop/screens/UI%20screen/Wishlist_bloc/wishlist_bloc.dart';
 import 'package:gshop/features/shop/screens/UI%20screen/orderspage/cart_bloc/cart_bloc.dart';
@@ -19,7 +19,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'features/shop/screens/BottomNavigator/bloc/navigation_bloc.dart';
 
 void main() async {
@@ -54,6 +53,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         BlocProvider(
+          create: (context) => ConnectivityBloc()..checkInitialConnectivity(),
+        ),
+        BlocProvider(
           create: (context) => NavigationBloc(),
         ),
         BlocProvider<CartBloc>(
@@ -64,6 +66,15 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        builder: (context, child) {
+          return Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              child!,
+              ConnectivityIndicator(), // Add this to show connectivity status globally
+            ],
+          );
+        },
         routes: {
           '/': (BuildContext context) => AppEntryPoint(),
           '/Navigator': (BuildContext context) => NavigationMenu(),
@@ -75,47 +86,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-class AppEntryPoint extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: _checkOnboardingComplete(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        if (snapshot.hasData && !snapshot.data!) {
-          // Show onboarding screen if onboarding is not complete
-          return OnboardingScreen();
-        }
-
-        return StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.userChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            if (snapshot.data == null) {
-              return Landingpage();
-            }
-
-            return NavigationMenu(); // Home screen after sign-in
-          },
-        );
-      },
-    );
-  }
-
-  Future<bool> _checkOnboardingComplete() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('onboardingComplete') ?? false;
-  }
-}
-

@@ -109,6 +109,11 @@ class _PaymentPageState extends State<PaymentPage> {
                       text: 'Transaction Completed Successfully!',
                       autoCloseDuration: const Duration(seconds: 2),
                       showConfirmBtn: false,
+                      disableBackBtn: true,
+                      widget: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Icon(Icons.thumb_up, size: 32,),
+                      )
                     );
                     await Future.delayed(Duration(seconds: 2));
                     Navigator.pushReplacement(
@@ -130,6 +135,8 @@ class _PaymentPageState extends State<PaymentPage> {
                       backgroundColor: Colors.black,
                       titleColor: Colors.white,
                       textColor: Colors.white,
+                      disableBackBtn: true,
+                      confirmBtnText: "Okay"
                     );
                   }
 

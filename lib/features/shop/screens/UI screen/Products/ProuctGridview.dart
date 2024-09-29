@@ -7,9 +7,9 @@ import 'package:gshop/utils/formatters/Changecase.dart';
 
 class KGridview extends StatelessWidget {
   final List<Product> products;
-  final Shop? shop;
+  final List<Shop>? shops;
 
-  const KGridview({Key? key, required this.products, this.shop}) : super(key: key);
+  const KGridview({Key? key, required this.products,this.shops}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class KGridview extends StatelessWidget {
                 itemCount: entry.value.length,
                 itemBuilder: (context, index) {
                   final product = entry.value[index];
-                  return ProductPage(product: product, shop: shop, allProducts: products);
+                  return ProductPage(product: product, shops: shops, allProducts: products);
                 },
                 shrinkWrap: true, // To prevent scrolling issues
                 physics: NeverScrollableScrollPhysics(), // Disable scrolling for the grid view
