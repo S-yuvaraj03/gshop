@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gshop/data/repositories/fetch_data/fetchdata.dart';
+import 'package:gshop/data/repositories/fetch_data/fetchProductdata.dart';
 import 'package:gshop/features/shop/model/ProductModel.dart';
 import 'package:gshop/features/shop/screens/BottomNavigator/bottomNavigator.dart';
 import 'package:gshop/features/shop/screens/UI%20screen/Products/ProductPage.dart';

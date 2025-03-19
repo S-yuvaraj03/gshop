@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gshop/common/screen_size.dart';
 import 'package:gshop/utils/constant/sizes.dart';
 
 // ignore: must_be_immutable
@@ -10,9 +11,8 @@ class ProductCard extends StatelessWidget {
       required this.Ktitle,
       required this.KText1,
       required this.KText2,
-      required this.KText3, 
-      this.KColor
-      });
+      required this.KText3,
+      this.KColor});
 
   final String KImage;
   final String Kcategory;
@@ -24,7 +24,9 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double kheight = MediaQuery.of(context).size.height;
+    final ss = ScreenSize(context: context);
+    double kheight = ss.h;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Card(
@@ -44,7 +46,7 @@ class ProductCard extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      height: kheight*0.2,
+                      height: kheight * 0.2,
                       width: double.infinity,
                       child: Image.network(
                         KImage, // Replace with your image URL
@@ -78,7 +80,7 @@ class ProductCard extends StatelessWidget {
                   right: 8.0,
                   child: Container(
                     padding:
-                    EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
+                        EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
                     decoration: BoxDecoration(
                       color: Colors.black54,
                       borderRadius: BorderRadius.circular(10.0),

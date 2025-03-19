@@ -12,6 +12,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppEntryPoint extends StatelessWidget {
   @override
+/**
+ * Widget build method that returns a BlocBuilder<ConnectivityBloc, ConnectivityState> widget.
+ * It handles different states of connectivity and displays corresponding screens.
+ */
   Widget build(BuildContext context) {
     return BlocBuilder<ConnectivityBloc, ConnectivityState>(
       builder: (context, state) {

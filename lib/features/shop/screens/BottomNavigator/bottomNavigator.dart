@@ -71,11 +71,7 @@ class NavigationMenu extends StatelessWidget {
       ),
       body: BlocBuilder<NavigationBloc, int>(
         builder: (context, selectedIndex) {
-          final screens = [
-            HomePage(),
-            ShopListScreen(),
-            PastOrdersPage()
-          ];
+          final screens = [HomePage(), ShopListScreen(), PastOrdersPage()];
           return screens[selectedIndex];
         },
       ),
@@ -86,7 +82,11 @@ class NavigationMenu extends StatelessWidget {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => AichatScreen()));
         },
-        child: Image.asset("assets/images/google-gemini-icon.png"),
+        child: Image.asset(
+          "assets/images/google-gemini-icon.png",
+          fit: BoxFit.fitHeight,
+          height: 30,
+        ),
       ),
     );
   }

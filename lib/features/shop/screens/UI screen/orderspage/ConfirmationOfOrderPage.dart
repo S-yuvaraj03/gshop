@@ -60,76 +60,80 @@ class ConfirmationOfOrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double kheight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: kheight * 0.08,
-            ),
-            Text('Order Confirmation',
-                style: TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
-            SizedBox(height: 16),
-            Text('Delivery Address', style: TextStyle(fontSize: TSizes.fontLg)),
-            SizedBox(height: 8),
-            Text(deliveryAddress, style: TextStyle(fontSize: TSizes.fontLg)),
-            Divider(thickness: 1, height: 32),
-            Text('Order Details',
-                style: TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
-            Expanded(
-              child: ListView.builder(
-                itemCount: cartItems.length,
-                itemBuilder: (context, index) {
-                  final item = cartItems[index];
-                  return ListTile(
-                    leading: Image.network(item.product.imageLink),
-                    title: Text(item.product.product_name),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(item.product.product_description),
-                        Text('Qty ${item.quantity}'),
-                        Text(
-                            'Delivery by ${item.product.deliveryDays} Days, time: ${item.product.deliveryTime}'),
-                      ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: kheight * 0.08,
+              ),
+              Text('Order Confirmation',
+                  style: TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+              SizedBox(height: 16),
+              Text('Delivery Address', style: TextStyle(fontSize: TSizes.fontLg)),
+              SizedBox(height: 8),
+              Text(deliveryAddress, style: TextStyle(fontSize: TSizes.fontLg)),
+              Divider(thickness: 1, height: 32),
+              Text('Order Details',
+                  style: TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: cartItems.length,
+                  itemBuilder: (context, index) {
+                    final item = cartItems[index];
+                    return ListTile(
+                      leading: Image.network(item.product.imageLink),
+                      title: Text(item.product.product_name),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(item.product.product_description),
+                          Text('Qty ${item.quantity}'),
+                          Text(
+                              'Delivery by ${item.product.deliveryDays} Days, time: ${item.product.deliveryTime}'),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Divider(thickness: 1, height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Total',
+                      style:
+                          TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+                  Text('₹${totalAmount}',
+                      style:
+                          TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+                ],
+              ),
+              SizedBox(height: 16),
+              MaterialButton(
+                color: Colors.black,
+                onPressed: () async {
+                  print('Order completed');
+                  await saveOrderToFirestore(context);
+                  await updateShopProducts(); // Update available products in shop collection
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NavigationMenu(),
                     ),
-                  );
+                  ); // Optionally, navigate to a different page
                 },
+                child: Text(
+                  'Complete order',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-            ),
-            Divider(thickness: 1, height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Total',
-                    style:
-                        TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
-                Text('₹${totalAmount}',
-                    style:
-                        TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
-              ],
-            ),
-            SizedBox(height: 16),
-            MaterialButton(
-              color: Colors.black,
-              onPressed: () async {
-                await saveOrderToFirestore(context);
-                await updateShopProducts(); // Update available products in shop collection
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NavigationMenu(),
-                  ),
-                ); // Optionally, navigate to a different page
-              },
-              child: Text(
-                'Complete order',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

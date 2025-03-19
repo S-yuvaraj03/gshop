@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,7 +30,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   final fcmToken = await FirebaseMessaging.instance.getToken();
-  print(fcmToken);
+  // print(fcmToken);
   await Permission.camera.request();
   await Permission.microphone.request();
   await Permission.manageExternalStorage.request();
@@ -59,7 +61,11 @@ class MyApp extends StatelessWidget {
           create: (context) => NavigationBloc(),
         ),
         BlocProvider<CartBloc>(
-          create: (context) => CartBloc(),
+          create: (context) {
+            final userEmail = FirebaseAuth.instance.currentUser!.email ?? ''; // Replace with actual user email
+            final firestore = FirebaseFirestore.instance; // Get Firestore instance
+            return CartBloc(userEmail, firestore);
+          },
         ),
         BlocProvider(create: (context) => OrderBloc()),
         BlocProvider(create: (_) => WishlistBloc()),

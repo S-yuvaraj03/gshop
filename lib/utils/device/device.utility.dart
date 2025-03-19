@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class TDeviceUtils {
-  
-  static void hidekeyboard(BuildContext context) {
+  late BuildContext context;
+  TDeviceUtils({
+    required this.context,
+  }) {
+    context = this.context;
+  }
+  void hidekeyboard() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
@@ -29,12 +34,18 @@ class TDeviceUtils {
   }
 
 //modified
-  static double getScreenHeight(BuildContext context) {
+  double get getScreenHeight {
     return MediaQuery.of(context).size.height;
   }
 
-  static double getScreenWidth(BuildContext context) {
+  double get getScreenWidth {
     return MediaQuery.of(context).size.width;
   }
 
+  int _syed = 0;
+  set setsyed(int val) {
+    _syed = val;
+  }
+
+  get getsyed => _syed;
 }

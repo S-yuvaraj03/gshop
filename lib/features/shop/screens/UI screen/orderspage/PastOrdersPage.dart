@@ -21,94 +21,97 @@ class PastOrdersPage extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Past Orders'),
-        automaticallyImplyLeading: false,
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.email) // Use the user's email to filter orders
-            .collection('orders')
-            .orderBy('timestamp', descending: true)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No past orders found.'));
-          }
-          final orders = snapshot.data!.docs;
-
-          return ListView.builder(
-            itemCount: orders.length,
-            itemBuilder: (context, index) {
-              final order = orders[index];
-              final totalAmount = order['totalAmount'];
-              final deliveryAddress = order['deliveryAddress'];
-              final items = (order['items'] as List)
-                  .map((item) => CartSelectedItem.fromMap(item))
-                  .toList();
-
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Order #${order.id}',
-                          style: TextStyle(
-                              fontSize: TSizes.fontMd, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 8),
-                      Text('Delivery Address: $deliveryAddress',
-                          style: TextStyle(fontSize: TSizes.fontMd)),
-                      Divider(thickness: 1, height: 32),
-                      Text('Order Details',
-                          style: TextStyle(
-                              fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: items.length,
-                        itemBuilder: (context, index) {
-                          final item = items[index];
-                          return ListTile(
-                            leading: Image.network(item.product.imageLink),
-                            title: Text(item.product.product_name),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(item.product.product_description),
-                                Text('Qty ${item.quantity} X ₹${item.product.product_offerprice}'),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                      Divider(thickness: 1, height: 32),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Total Amount :',
-                              style: TextStyle(
-                                  fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
-                          Text(' ₹${totalAmount}',
-                              style: TextStyle(
-                                  fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Past Orders'),
+          automaticallyImplyLeading: false,
+        ),
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.email) // Use the user's email to filter orders
+              .collection('orders')
+              .orderBy('timestamp', descending: true)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('No past orders found.'));
+            }
+            final orders = snapshot.data!.docs;
+      
+            return ListView.builder(
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+                final order = orders[index];
+                final totalAmount = order['totalAmount'];
+                final deliveryAddress = order['deliveryAddress'];
+                final items = (order['items'] as List)
+                    .map((item) => CartSelectedItem.fromMap(item))
+                    .toList();
+      
+                return Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Order #${order.id}',
+                            style: TextStyle(
+                                fontSize: TSizes.fontMd, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
+                        Text('Delivery Address: $deliveryAddress',
+                            style: TextStyle(fontSize: TSizes.fontMd)),
+                        Divider(thickness: 1, height: 32),
+                        Text('Order Details',
+                            style: TextStyle(
+                                fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            final item = items[index];
+                            return ListTile(
+                              leading: Image.network(item.product.imageLink),
+                              title: Text(item.product.product_name),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(item.product.product_description),
+                                  Text('Qty ${item.quantity} X ₹${item.product.product_offerprice}'),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        Divider(thickness: 1, height: 32),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Total Amount :',
+                                style: TextStyle(
+                                    fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+                            Text(' ₹${totalAmount}',
+                                style: TextStyle(
+                                    fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

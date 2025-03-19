@@ -32,34 +32,37 @@ class KGridview extends StatelessWidget {
     }
 
     return SingleChildScrollView(
-      child: Column(
-        children: categories.entries.map((entry) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  entry.key.capitalize(),
-                  style: TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold),
+      child: Container(
+        color: Colors.blue[50],
+        child: Column(
+          children: categories.entries.map((entry) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    entry.key.capitalize(),
+                    style: TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: kcrossAxisCount, // Number of products per row
-                  childAspectRatio: kchildAspectRatio, // Adjust the aspect ratio as needed
+                GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: kcrossAxisCount, // Number of products per row
+                    childAspectRatio: kchildAspectRatio, // Adjust the aspect ratio as needed
+                  ),
+                  itemCount: entry.value.length,
+                  itemBuilder: (context, index) {
+                    final product = entry.value[index];
+                    return ProductPage(product: product, shops: shops, allProducts: products);
+                  },
+                  shrinkWrap: true, // To prevent scrolling issues
+                  physics: NeverScrollableScrollPhysics(), // Disable scrolling for the grid view
                 ),
-                itemCount: entry.value.length,
-                itemBuilder: (context, index) {
-                  final product = entry.value[index];
-                  return ProductPage(product: product, shops: shops, allProducts: products);
-                },
-                shrinkWrap: true, // To prevent scrolling issues
-                physics: NeverScrollableScrollPhysics(), // Disable scrolling for the grid view
-              ),
-            ],
-          );
-        }).toList(),
+              ],
+            );
+          }).toList(),
+        ),
       ),
     );
   }

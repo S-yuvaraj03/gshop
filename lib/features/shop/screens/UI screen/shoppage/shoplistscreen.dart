@@ -4,7 +4,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:gshop/common/styles/KCard.dart';
 import 'package:gshop/common/widgets/appDrawer.dart';
 import 'package:gshop/common/widgets/appbar.dart';
-import 'package:gshop/data/repositories/fetch_data/fetchProducts.dart';
+import 'package:gshop/data/repositories/fetch_data/fetchShopsdata.dart';
 import 'package:gshop/features/shop/model/ShopModel.dart';
 import 'package:gshop/features/shop/screens/UI%20screen/shop_bloc/shop_bloc.dart';
 import 'package:gshop/features/shop/screens/UI%20screen/shoppage/shopdetailscreen.dart';
@@ -51,15 +51,18 @@ class _ShopListScreenState extends State<ShopListScreen> {
         drawer: Appdrawer(),
         body: Stack(
           children: [
-            Column(
-              children: [
-                SizedBox(
-                  height: 50,
-                ),
-                Expanded(
-                  child: ShopListBody(scannedShopId: scannedShopId),
-                ),
-              ],
+            Container(
+              color: Colors.blue[50],
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Expanded(
+                    child: ShopListBody(scannedShopId: scannedShopId),
+                  ),
+                ],
+              ),
             ),
             Positioned(
               top: 2.0,
@@ -102,32 +105,32 @@ class ShopListBody extends StatelessWidget {
           return shops.isEmpty
               ? Center(child: Text('No shops found for this QR code'))
               : ListView.builder(
-                  itemCount: shops.length,
-                  itemBuilder: (context, index) {
-                    Shop shop = shops[index];
-                    return GestureDetector(
-                      child: ProductCard(
-                        KColor: Colors.white,
-                        KImage: shop.shopeimages.first,
-                        Kcategory: "shopid: ${shop.shopid}",
-                        Ktitle: shop.shopename,
-                        KText1: shop.isDeliveryAvailable == true
-                            ? 'Online shopping'
-                            : 'In-store shopping',
-                        KText2: shop.isOnline == true ? 'Open' : 'Close',
-                        KText3: "${shop.openingtime}--${shop.closingtime}",
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ShopDetailScreen(shop: shop),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                );
+                    itemCount: shops.length,
+                    itemBuilder: (context, index) {
+                      Shop shop = shops[index];
+                      return GestureDetector(
+                        child: ProductCard(
+                          KColor: Colors.white,
+                          KImage: shop.shopeimages.first,
+                          Kcategory: "shopid: ${shop.shopid}",
+                          Ktitle: shop.shopename,
+                          KText1: shop.isDeliveryAvailable == true
+                              ? 'Online shopping'
+                              : 'In-store shopping',
+                          KText2: shop.isOnline == true ? 'Open' : 'Close',
+                          KText3: "${shop.openingtime}--${shop.closingtime}",
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ShopDetailScreen(shop: shop, allShops: shops,),
+                            ),
+                          );
+                        },
+                      );
+                    },
+              );
         }
         return Center(child: Text('No shops found'));
       },

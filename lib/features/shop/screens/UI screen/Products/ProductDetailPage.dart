@@ -123,52 +123,53 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       try {
         associatedShop = widget.shops!.firstWhere(
           // (shop) => shop.shopid == shop.products.contains(product), // Match shopid with product's shopid
-          (shop) => shop.products.any((prod) => prod.product_id == widget.product.product_id),
+          (shop) => shop.products
+              .any((prod) => prod.product_id == widget.product.product_id),
         );
       } catch (e) {
-        debugPrint("No matching shop found for product: ${widget.product.product_name}");
+        debugPrint(
+            "No matching shop found for product: ${widget.product.product_name}");
       }
     }
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          widget.product.product_name,
-          overflow: TextOverflow.ellipsis,
-        ),
-        actions: [
-          BlocBuilder<WishlistBloc, WishlistState>(
-            builder: (context, state) {
-              isWishlisted = state.wishlist.contains(widget.product);
-              return IconButton(
-                icon: Icon(
-                  isWishlisted ? Icons.favorite : Icons.favorite_border,
-                  color: isWishlisted ? Colors.red : Colors.grey,
-                  size: TSizes.iconLg,
-                ),
-                onPressed: () {
-                  if (isWishlisted) {
-                    context
-                        .read<WishlistBloc>()
-                        .add(RemoveProductFromWishlist(widget.product));
-                  } else {
-                    context
-                        .read<WishlistBloc>()
-                        .add(AddProductToWishlist(widget.product));
-                  }
-                },
-              );
-            },
+          backgroundColor: Colors.white,
+          title: Text(
+            widget.product.product_name,
+            overflow: TextOverflow.ellipsis,
           ),
-        ]
-      ),
+          actions: [
+            BlocBuilder<WishlistBloc, WishlistState>(
+              builder: (context, state) {
+                isWishlisted = state.wishlist.contains(widget.product);
+                return IconButton(
+                  icon: Icon(
+                    isWishlisted ? Icons.favorite : Icons.favorite_border,
+                    color: isWishlisted ? Colors.red : Colors.grey,
+                    size: TSizes.iconLg,
+                  ),
+                  onPressed: () {
+                    if (isWishlisted) {
+                      context
+                          .read<WishlistBloc>()
+                          .add(RemoveProductFromWishlist(widget.product));
+                    } else {
+                      context
+                          .read<WishlistBloc>()
+                          .add(AddProductToWishlist(widget.product));
+                    }
+                  },
+                );
+              },
+            ),
+          ]),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
-              height: kheight*0.4,
+              height: kheight * 0.4,
               child: Image.network(
                 widget.product.imageLink,
                 fit: BoxFit.cover,
@@ -181,8 +182,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(widget.product.product_name,
-                      style:
-                          TextStyle(fontSize: TSizes.Lg, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          fontSize: TSizes.Lg, fontWeight: FontWeight.bold)),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -243,7 +244,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text("${associatedShop!.shopename}",
-                        
                         style: TextStyle(fontSize: TSizes.Lg)),
                   ),
                 ],
@@ -252,41 +252,85 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(onPressed: (){
-                    if(_addressController.text != ''){
-                      context.read<CartBloc>().add(AddItem(widget.product));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Added to cart')),
-                      );
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CartPage(deliveryAddress: _addressController.text)),
-                      );
-                    };
-                  }, 
-                  child: Text('Add to Cart',style: TextStyle(color: Colors.white),),
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, kheight*0.054),
-                      backgroundColor: Colors.black,
+                  child: BlocListener<CartBloc, CartState>(
+                    listener: (context, state) {
+                      if (state.message == "Max stock limit reached") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text('Maximum stock limit reached')),
+                        );
+                      } else if (state.message == "Stock unavailable") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Product is out of stock')),
+                        );
+                      }},
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_addressController.text.isNotEmpty) {
+                          context.read<CartBloc>().add(AddItem(widget.product));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Added to cart')),
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CartPage(
+                                deliveryAddress: _addressController.text),
+                          ),
+                        );
+                      }
+                        
+                      },
+                      child: Text(
+                        'Add to Cart',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(double.infinity, kheight * 0.054),
+                        backgroundColor: Colors.black,
+                      ),
                     ),
                   ),
+
+                  // ElevatedButton(onPressed: (){
+                  //   if(_addressController.text != ''){
+                  //     context.read<CartBloc>().add(AddItem(widget.product));
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       SnackBar(content: Text('Added to cart')),
+                  //     );
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => CartPage(deliveryAddress: _addressController.text)),
+                  //     );
+                  //   };
+                  // },
+                  // child: Text('Add to Cart',style: TextStyle(color: Colors.white),),
+                  // style: ElevatedButton.styleFrom(
+                  //     minimumSize: Size(double.infinity, kheight*0.054),
+                  //     backgroundColor: Colors.black,
+                  //   ),
+                  // ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(onPressed: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CompareProductPage(
-                          product1: widget.product,
-                          allProducts: widget.allProducts,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CompareProductPage(
+                            product1: widget.product,
+                            allProducts: widget.allProducts,
+                          ),
                         ),
-                      ),
-                    );
-                  }, 
-                  child: Text('Compare Product',style: TextStyle(color: Colors.white),),
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, kheight*0.054),
+                      );
+                    },
+                    child: Text(
+                      'Compare Product',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, kheight * 0.054),
                       backgroundColor: Colors.grey[800],
                     ),
                   ),
@@ -306,7 +350,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Container(
-                height: kheight*0.3,
+                height: kheight * 0.3,
                 child: GoogleMap(
                   myLocationButtonEnabled: true,
                   zoomControlsEnabled: true,
@@ -342,10 +386,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     );
 
                     // Update address for current location
-                    await _getAddressFromLatLng(position.latitude, position.longitude);
+                    await _getAddressFromLatLng(
+                        position.latitude, position.longitude);
                   },
                   markers: {
-                    if (_selectedLocationMarker != null) _selectedLocationMarker!,
+                    if (_selectedLocationMarker != null)
+                      _selectedLocationMarker!,
                   },
                   onTap: (pos) async {
                     setState(() {
@@ -370,33 +416,42 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                  onPressed: () {
-                    _getCurrentLocation().then((value) {
-                      lat = '${value.latitude}';
-                      long = '${value.longitude}';
-                      setState(() {
-                        locationMessage = 'Location: $lat, $long';
-                      });
-                      _liveLocation();
+                onPressed: () {
+                  _getCurrentLocation().then((value) {
+                    lat = '${value.latitude}';
+                    long = '${value.longitude}';
+                    setState(() {
+                      locationMessage = 'Location: $lat, $long';
                     });
-                  },
-                  child: Text("Get Current Location",style: TextStyle(color: Colors.white),),
-                  style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, kheight*0.054),
+                    _liveLocation();
+                  });
+                },
+                child: Text(
+                  "Get Current Location",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, kheight * 0.054),
                   backgroundColor: Colors.black,
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(onPressed: (){
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Address saved: ${_addressController.text}')),
-                );
-              }, 
-              child: Text('Save Address',style: TextStyle(color: Colors.white),),
-              style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, kheight*0.054),
+              child: ElevatedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content:
+                            Text('Address saved: ${_addressController.text}')),
+                  );
+                },
+                child: Text(
+                  'Save Address',
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, kheight * 0.054),
                   backgroundColor: Colors.grey[800],
                 ),
               ),
@@ -407,7 +462,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             if (similarProducts.isNotEmpty) ...[
               Container(
                 width: double.infinity,
-                height: kheight*0.054,
+                height: kheight * 0.054,
                 decoration: BoxDecoration(
                     border: Border.symmetric(
                         horizontal: BorderSide(color: Colors.grey)),
@@ -422,14 +477,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   children: [
                     Text(
                       'View Similar ',
-                      style:
-                          TextStyle(fontSize: TSizes.Lg, fontStyle: FontStyle.italic),
+                      style: TextStyle(
+                          fontSize: TSizes.Lg, fontStyle: FontStyle.italic),
                     ),
                     Icon(Icons.add_box_outlined),
                   ],
                 ),
               ),
-              KGridview(products:similarProducts, shops: widget.shops,), // Use the KGridview widget to display similar products
+              KGridview(
+                products: similarProducts,
+                shops: widget.shops,
+              ), // Use the KGridview widget to display similar products
             ],
           ],
         ),

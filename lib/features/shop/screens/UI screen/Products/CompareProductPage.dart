@@ -48,84 +48,87 @@ class _CompareProductPageState extends State<CompareProductPage> {
     double kwidth = MediaQuery.of(context).size.width;
     List<Product> similarProducts = _getSimilarProducts();
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("Compare Products"),
-      ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              _buildProductColumn(widget.product1, widget.product1.product_name),
-              VerticalDivider(color: Colors.black, width: 2),
-              if (product2 != null)
-                _buildProductColumn(product2!, product2!.product_name)
-              else
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(16),
-                    height: kheight*0.2,
-                    child: Center(
-                      child: Text(
-                        "Please select a product to compare from the options below.",
-                        style: TextStyle(fontSize: 16),
-                        textAlign: TextAlign.center,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text("Compare Products"),
+        ),
+        body: Column(
+          children: [
+            Row(
+              children: [
+                _buildProductColumn(widget.product1, widget.product1.product_name),
+                VerticalDivider(color: Colors.black, width: 2),
+                if (product2 != null)
+                  _buildProductColumn(product2!, product2!.product_name)
+                else
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      height: kheight*0.2,
+                      child: Center(
+                        child: Text(
+                          "Please select a product to compare from the options below.",
+                          style: TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ),
-                ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: similarProducts.isEmpty
-                ? Center(child: Text("No similar products found"))
-                : ListView.builder(
-                    itemCount: similarProducts.length,
-                    itemBuilder: (context, index) {
-                      Product product = similarProducts[index];
-                      return Card(
-                        margin: EdgeInsets.all(8),
-                        child: ListTile(
-                          leading: Image.network(
-                            product.imageLink,
-                            width: kwidth*0.12,
-                            height: kheight*0.05,
-                            fit: BoxFit.cover,
+              ],
+            ),
+            SizedBox(height: 20),
+            Expanded(
+              child: similarProducts.isEmpty
+                  ? Center(child: Text("No similar products found"))
+                  : ListView.builder(
+                      itemCount: similarProducts.length,
+                      itemBuilder: (context, index) {
+                        Product product = similarProducts[index];
+                        return Card(
+                          margin: EdgeInsets.all(8),
+                          child: ListTile(
+                            leading: Image.network(
+                              product.imageLink,
+                              width: kwidth*0.12,
+                              height: kheight*0.05,
+                              fit: BoxFit.cover,
+                            ),
+                            title: Text(
+                              product.product_name,
+                              style: TextStyle(fontSize: TSizes.fontMd),
+                            ),
+                            subtitle: Text(
+                              product.product_description,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize: TSizes.fontSm),
+                            ),
+                            trailing: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  product2 = product;
+                                });
+                              },
+                              child: Text("Select"),
+                            ),
                           ),
-                          title: Text(
-                            product.product_name,
-                            style: TextStyle(fontSize: TSizes.fontMd),
-                          ),
-                          subtitle: Text(
-                            product.product_description,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: TSizes.fontSm),
-                          ),
-                          trailing: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                product2 = product;
-                              });
-                            },
-                            child: Text("Select"),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AichatScreen()));
-        },
-        child: Image.asset("assets/images/google-gemini-icon.png"),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.white,
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => AichatScreen()));
+          },
+          child: Image.asset("assets/images/google-gemini-icon.png"),
+        ),
       ),
     );
   }

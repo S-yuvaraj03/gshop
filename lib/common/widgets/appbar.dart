@@ -9,6 +9,7 @@ class GshopAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     double kwidth = MediaQuery.of(context).size.width;
+    double kheight = MediaQuery.of(context).size.height;
     final User? user = FirebaseAuth.instance.currentUser;
 
     return Column(
@@ -16,23 +17,20 @@ class GshopAppbar extends StatelessWidget implements PreferredSizeWidget {
         AppBar(
           backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
-          leading: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: IconButton(
+          leading: IconButton(
                 icon: Icon(Icons.menu, size: TSizes.iconLg, color: Colors.grey),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 }),
-          ),
-          leadingWidth: 35,
-          title: Center(
-            child: Row(
+          leadingWidth: kwidth * 0.15,
+          title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Image.asset(
                   "assets/images/googlelogo.png",
-                  height: 55,
-                  width: kwidth*0.3,
+                  fit: BoxFit.fitWidth,
+                  height: kheight*0.025,
+                  width: kwidth*0.16,
                 ),
                 Text(
                   ' Shopping',
@@ -40,8 +38,6 @@ class GshopAppbar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ],
             ),
-          ),
-          centerTitle: false,
           actions: <Widget>[
             IconButton(
               icon: user?.photoURL != null

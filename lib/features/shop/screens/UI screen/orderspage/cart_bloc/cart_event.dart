@@ -33,3 +33,5 @@ class DeleteItem extends CartEvent {
 }
 
 class CartCleared extends CartEvent {}
+
+class LoadCart extends CartEvent {}

@@ -46,7 +46,7 @@ class Appdrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CartPage(deliveryAddress: ''),
+                  builder: (context) => CartPage(deliveryAddress: 'Please enter delivery address', ),
                 ),
               );
             },

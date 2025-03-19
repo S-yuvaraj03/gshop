@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:gshop/data/repositories/fetch_data/fetchProducts.dart';
+import 'package:gshop/data/repositories/fetch_data/fetchShopsdata.dart';
 import 'package:gshop/utils/constant/sizes.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -13,7 +13,7 @@ import 'package:gshop/features/Providers/providers.dart';
 import 'package:gshop/features/shop/model/ProductModel.dart';
 import 'package:gshop/features/shop/model/ShopModel.dart';
 import 'package:gshop/features/shop/screens/UI%20screen/Products/ProductPage.dart';
-import 'package:gshop/data/repositories/fetch_data/fetchdata.dart'; // Import your fetch functions
+import 'package:gshop/data/repositories/fetch_data/fetchProductdata.dart'; // Import your fetch functions
 // import 'package:gshop/data/repositories/chat_repository.dart'; // Add import for ChatRepository
 
 class AichatScreen extends ConsumerStatefulWidget {
