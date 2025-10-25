@@ -23,19 +23,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _buildPage(
         image: 'assets/images/gshoppingad3.jpg',
         title: "Make Payment",
-        description:
-            "Securely complete your payment to finalize your order",
+        description: "Securely complete your payment to finalize your order",
       ),
       _buildPage(
         image: 'assets/images/gshoppingad4.jpg',
         title: "Get Your Order",
-        description:
-            "Expect prompt delivery of your chosen items.",
+        description: "Expect prompt delivery of your chosen items.",
       ),
     ];
   }
 
-  Widget _buildPage({required String image, required String title, required String description}) {
+  Widget _buildPage(
+      {required String image,
+      required String title,
+      required String description}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,7 +59,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     style: TextStyle(color: Colors.grey, fontSize: TSizes.Lg),
                   ),
                 ],
-              ),         
+              ),
             ],
           ),
         ),
@@ -90,13 +91,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        // Returning false prevents the app from going back.
-        return false;
-      },
-      child: WillPopScope(
-        onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
+      child: PopScope(
+        canPop: false,
         child: Scaffold(
           body: Stack(
             children: [
@@ -150,11 +148,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           // Mark onboarding as complete
                           final prefs = await SharedPreferences.getInstance();
                           await prefs.setBool('onboardingComplete', true);
-                          
+
                           // Navigate to landing page
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => Landingpage()),
+                            MaterialPageRoute(
+                                builder: (context) => Landingpage()),
                           );
                         } else {
                           _pageController.nextPage(

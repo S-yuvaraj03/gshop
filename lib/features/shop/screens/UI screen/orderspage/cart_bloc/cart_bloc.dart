@@ -9,9 +9,9 @@ part 'cart_state.dart';
 
 class CartSelectedItem extends Equatable {
   final Product product;
-  int quantity;
+  final int quantity;
 
-  CartSelectedItem(this.product, this.quantity);
+  const CartSelectedItem(this.product, this.quantity);
 
   CartSelectedItem copyWith({int? quantity}) {
     return CartSelectedItem(
@@ -157,7 +157,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           .collection('cartitems')
           .get();
       final List<CartSelectedItem> items = cartItems.docs.map((doc) {
-        return CartSelectedItem.fromMap(doc.data() as Map<String, dynamic>);
+        return CartSelectedItem.fromMap(doc.data());
       }).toList();
       emit(state.copyWith(items: items));
     });
@@ -177,7 +177,5 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         await doc.reference.delete();
       }
     });
-
-    
   }
 }

@@ -26,13 +26,14 @@ class ConfirmationOfOrderPage extends StatelessWidget {
     for (var cartItem in cartItems) {
       await productService.updateProductAvailability(
         cartItem.product.product_id, // Product ID
-        cartItem.quantity,           // Quantity purchased
+        cartItem.quantity, // Quantity purchased
       );
     }
   }
 
   Future<void> saveOrderToFirestore(BuildContext context) async {
-    final User? user = FirebaseAuth.instance.currentUser; // Get the logged-in user
+    final User? user =
+        FirebaseAuth.instance.currentUser; // Get the logged-in user
 
     if (user != null) {
       CollectionReference orders = FirebaseFirestore.instance
@@ -60,8 +61,8 @@ class ConfirmationOfOrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double kheight = MediaQuery.of(context).size.height;
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -72,14 +73,17 @@ class ConfirmationOfOrderPage extends StatelessWidget {
                 height: kheight * 0.08,
               ),
               Text('Order Confirmation',
-                  style: TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
               SizedBox(height: 16),
-              Text('Delivery Address', style: TextStyle(fontSize: TSizes.fontLg)),
+              Text('Delivery Address',
+                  style: TextStyle(fontSize: TSizes.fontLg)),
               SizedBox(height: 8),
               Text(deliveryAddress, style: TextStyle(fontSize: TSizes.fontLg)),
               Divider(thickness: 1, height: 32),
               Text('Order Details',
-                  style: TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
               Expanded(
                 child: ListView.builder(
                   itemCount: cartItems.length,
@@ -106,11 +110,13 @@ class ConfirmationOfOrderPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Total',
-                      style:
-                          TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          fontSize: TSizes.fontLg,
+                          fontWeight: FontWeight.bold)),
                   Text('₹${totalAmount}',
-                      style:
-                          TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          fontSize: TSizes.fontLg,
+                          fontWeight: FontWeight.bold)),
                 ],
               ),
               SizedBox(height: 16),

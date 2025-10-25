@@ -7,7 +7,8 @@ import 'package:gshop/utils/constant/sizes.dart';
 class PastOrdersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final User? user = FirebaseAuth.instance.currentUser; // Get the logged-in user
+    final User? user =
+        FirebaseAuth.instance.currentUser; // Get the logged-in user
 
     if (user == null) {
       return Scaffold(
@@ -21,8 +22,8 @@ class PastOrdersPage extends StatelessWidget {
       );
     }
 
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Past Orders'),
@@ -46,7 +47,7 @@ class PastOrdersPage extends StatelessWidget {
               return Center(child: Text('No past orders found.'));
             }
             final orders = snapshot.data!.docs;
-      
+
             return ListView.builder(
               itemCount: orders.length,
               itemBuilder: (context, index) {
@@ -56,7 +57,7 @@ class PastOrdersPage extends StatelessWidget {
                 final items = (order['items'] as List)
                     .map((item) => CartSelectedItem.fromMap(item))
                     .toList();
-      
+
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -65,14 +66,16 @@ class PastOrdersPage extends StatelessWidget {
                       children: [
                         Text('Order #${order.id}',
                             style: TextStyle(
-                                fontSize: TSizes.fontMd, fontWeight: FontWeight.bold)),
+                                fontSize: TSizes.fontMd,
+                                fontWeight: FontWeight.bold)),
                         SizedBox(height: 8),
                         Text('Delivery Address: $deliveryAddress',
                             style: TextStyle(fontSize: TSizes.fontMd)),
                         Divider(thickness: 1, height: 32),
                         Text('Order Details',
                             style: TextStyle(
-                                fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+                                fontSize: TSizes.fontLg,
+                                fontWeight: FontWeight.bold)),
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
@@ -86,7 +89,8 @@ class PastOrdersPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(item.product.product_description),
-                                  Text('Qty ${item.quantity} X ₹${item.product.product_offerprice}'),
+                                  Text(
+                                      'Qty ${item.quantity} X ₹${item.product.product_offerprice}'),
                                 ],
                               ),
                             );
@@ -98,10 +102,12 @@ class PastOrdersPage extends StatelessWidget {
                           children: [
                             Text('Total Amount :',
                                 style: TextStyle(
-                                    fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+                                    fontSize: TSizes.fontLg,
+                                    fontWeight: FontWeight.bold)),
                             Text(' ₹${totalAmount}',
                                 style: TextStyle(
-                                    fontSize: TSizes.fontLg, fontWeight: FontWeight.bold)),
+                                    fontSize: TSizes.fontLg,
+                                    fontWeight: FontWeight.bold)),
                           ],
                         ),
                       ],

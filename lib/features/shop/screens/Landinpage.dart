@@ -9,8 +9,8 @@ class Landingpage extends ConsumerWidget {
   const Landingpage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         body: Container(
           width: double.infinity,
@@ -51,14 +51,17 @@ class Landingpage extends ConsumerWidget {
                 width: 300,
                 child: ElevatedButton(
                   onPressed: () async {
-                    final user = await ref.read(authProvider).signInWithGoogle();
+                    final user =
+                        await ref.read(authProvider).signInWithGoogle();
                     if (user != null) {
                       // Optionally, show a success message
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Successfully signed in!')),
                       );
                       Navigator.push(
-                          context, MaterialPageRoute(builder: (context)=> NavigationMenu()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NavigationMenu()));
                     } else {
                       // Optionally, show an error message
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -96,11 +99,11 @@ class Landingpage extends ConsumerWidget {
                   ),
                 ),
               )
-            
             ],
           ),
         ),
-        backgroundColor: Colors.black, // Set background color to match the image
+        backgroundColor:
+            Colors.black, // Set background color to match the image
       ),
     );
   }

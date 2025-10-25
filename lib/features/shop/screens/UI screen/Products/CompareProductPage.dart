@@ -48,8 +48,8 @@ class _CompareProductPageState extends State<CompareProductPage> {
     double kwidth = MediaQuery.of(context).size.width;
     List<Product> similarProducts = _getSimilarProducts();
 
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -59,7 +59,8 @@ class _CompareProductPageState extends State<CompareProductPage> {
           children: [
             Row(
               children: [
-                _buildProductColumn(widget.product1, widget.product1.product_name),
+                _buildProductColumn(
+                    widget.product1, widget.product1.product_name),
                 VerticalDivider(color: Colors.black, width: 2),
                 if (product2 != null)
                   _buildProductColumn(product2!, product2!.product_name)
@@ -67,7 +68,7 @@ class _CompareProductPageState extends State<CompareProductPage> {
                   Expanded(
                     child: Container(
                       padding: EdgeInsets.all(16),
-                      height: kheight*0.2,
+                      height: kheight * 0.2,
                       child: Center(
                         child: Text(
                           "Please select a product to compare from the options below.",
@@ -92,8 +93,8 @@ class _CompareProductPageState extends State<CompareProductPage> {
                           child: ListTile(
                             leading: Image.network(
                               product.imageLink,
-                              width: kwidth*0.12,
-                              height: kheight*0.05,
+                              width: kwidth * 0.12,
+                              height: kheight * 0.05,
                               fit: BoxFit.cover,
                             ),
                             title: Text(
@@ -124,8 +125,8 @@ class _CompareProductPageState extends State<CompareProductPage> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.white,
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => AichatScreen()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AichatScreen()));
           },
           child: Image.asset("assets/images/google-gemini-icon.png"),
         ),
@@ -151,7 +152,8 @@ class _CompareProductPageState extends State<CompareProductPage> {
             Center(
               child: Text(
                 label,
-                style: TextStyle(fontSize: TSizes.fontLg, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: TSizes.fontLg, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -180,7 +182,8 @@ class _CompareProductPageState extends State<CompareProductPage> {
               iconsize: TSizes.iconMd,
             ),
             SizedBox(height: 8),
-            _buildProductDetailRow("Ratings:", product.product_rating.toString()),
+            _buildProductDetailRow(
+                "Ratings:", product.product_rating.toString()),
           ],
         ),
       ),
@@ -188,7 +191,10 @@ class _CompareProductPageState extends State<CompareProductPage> {
   }
 
   // Helper method to build a product detail row with padding
-  Widget _buildProductDetailRow(String title, String value,) {
+  Widget _buildProductDetailRow(
+    String title,
+    String value,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(

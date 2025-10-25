@@ -10,7 +10,6 @@ import 'package:gshop/features/shop/screens/UI%20screen/Product_bloc/product_blo
 import 'package:gshop/features/shop/screens/UI%20screen/Products/ProuctGridview.dart';
 import 'package:gshop/features/shop/screens/UI%20screen/shop_bloc/shop_bloc.dart';
 
-
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,8 @@ class HomePage extends StatelessWidget {
       body: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => ProductBloc(fetchProducts)..add(FetchProducts()),
+            create: (context) =>
+                ProductBloc(fetchProducts)..add(FetchProducts()),
           ),
           BlocProvider(
             create: (context) => ShopBloc(fetchShops)..add(FetchShops()),
@@ -37,13 +37,13 @@ class HomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double kwidth = MediaQuery.of(context).size.width;
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              height: kwidth*0.5,
+              height: kwidth * 0.5,
               child: Image.asset("assets/images/GshopAd.png"),
             ),
             BlocBuilder<ShopBloc, ShopState>(
@@ -53,13 +53,15 @@ class HomeBody extends StatelessWidget {
                 } else if (shopState is ShopError) {
                   return Center(child: Text('Error: ${shopState.message}'));
                 } else if (shopState is ShopLoaded) {
-                  final shop = shopState.shops.isNotEmpty ? shopState.shops : null;
+                  final shop =
+                      shopState.shops.isNotEmpty ? shopState.shops : null;
                   return BlocBuilder<ProductBloc, ProductState>(
                     builder: (context, productState) {
                       if (productState is ProductLoading) {
                         return Center(child: CircularProgressIndicator());
                       } else if (productState is ProductError) {
-                        return Center(child: Text('Error: ${productState.message}'));
+                        return Center(
+                            child: Text('Error: ${productState.message}'));
                       } else if (productState is ProductLoaded) {
                         final products = productState.products;
                         return KGridview(products: products, shops: shop);

@@ -25,7 +25,6 @@ class _CartPageState extends State<CartPage> {
     context.read<CartBloc>().add(LoadCart());
   }
 
-
   @override
   Widget build(BuildContext context) {
     double kwidth = MediaQuery.of(context).size.width;
@@ -58,12 +57,15 @@ class _CartPageState extends State<CartPage> {
           }
         }
 
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (didPop) async {
+            if (didPop)
+              return; // If the system already popped the route, do nothing
             // Save the cart items before navigating back
             await _saveCartItems();
+            // Navigate to homepage
             Navigator.of(context).pushReplacementNamed('/homepage');
-            return Future.value(false); // Prevents default back button behavior
           },
           child: Scaffold(
             appBar: AppBar(
@@ -172,7 +174,7 @@ class _CartPageState extends State<CartPage> {
                                                     setState(() {
                                                       isRemoveButtonDisabled =
                                                           true;
-                                                      item.quantity-1;
+                                                      item.quantity - 1;
                                                     });
 
                                                     context
@@ -215,7 +217,7 @@ class _CartPageState extends State<CartPage> {
                                                 (item.product.Available_count ??
                                                     0)) {
                                               setState(() {
-                                                item.quantity+1;
+                                                item.quantity + 1;
                                               });
 
                                               context
