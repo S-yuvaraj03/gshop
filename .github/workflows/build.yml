@@ -1,0 +1,53 @@
+name: Flutter CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout source code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Flutter environment
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'  # Specify your Flutter version
+
+      # Step 3: Cache Flutter dependencies (optional but speeds up builds)
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.yaml') }}
+
+      # Step 4: Install dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Step 5: Run Flutter analyze
+      - name: Run Flutter analyze
+        run: flutter analyze
+
+      # Step 6: Run unit & widget tests
+      - name: Run tests
+        run: flutter test --coverage
+
+      # Step 7: Build app bundle (only if tests & analysis pass)
+      - name: Build app bundle
+        if: success()
+        run: flutter build appbundle --release
+
+      # Step 8: Upload the AAB artifact
+      - name: Upload app bundle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-bundle
+          path: build/app/outputs/bundle/release/app-release.aab
