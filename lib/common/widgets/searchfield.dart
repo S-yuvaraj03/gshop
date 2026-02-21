@@ -3,8 +3,8 @@ import 'package:gshop/data/repositories/fetch_data/fetchProductdata.dart';
 import 'package:gshop/features/shop/model/ProductModel.dart';
 import 'package:gshop/features/shop/screens/BottomNavigator/bottomNavigator.dart';
 import 'package:gshop/features/shop/screens/UI%20screen/Products/ProductPage.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart';
+// import 'package:speech_to_text/speech_recognition_result.dart';
+// import 'package:speech_to_text/speech_to_text.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Searchfield extends StatefulWidget {
@@ -20,10 +20,10 @@ class _SearchfieldState extends State<Searchfield> {
   String _sortOption = 'None';
   List<Product> _allProducts = [];
   List<Product> _filteredProducts = [];
-  SpeechToText _speechToText = SpeechToText();
+  // SpeechToText _speechToText = SpeechToText();
   // ignore: unused_field
   bool _speechEnabled = false;
-  String _lastWords = '';
+  // String _lastWords = '';
 
   @override
   void initState() {
@@ -53,8 +53,9 @@ class _SearchfieldState extends State<Searchfield> {
 
   void _filterProducts() {
     _filteredProducts = _allProducts
-        .where((product) =>
-            product.product_name.toLowerCase().contains(_searchText.toLowerCase()))
+        .where((product) => product.product_name
+            .toLowerCase()
+            .contains(_searchText.toLowerCase()))
         .toList();
     _sortProducts();
   }
@@ -62,10 +63,12 @@ class _SearchfieldState extends State<Searchfield> {
   void _sortProducts() {
     switch (_sortOption) {
       case 'Price: Low to High':
-        _filteredProducts.sort((a, b) => a.product_price.compareTo(b.product_price));
+        _filteredProducts
+            .sort((a, b) => a.product_price.compareTo(b.product_price));
         break;
       case 'Price: High to Low':
-        _filteredProducts.sort((a, b) => b.product_price.compareTo(a.product_price));
+        _filteredProducts
+            .sort((a, b) => b.product_price.compareTo(a.product_price));
         break;
       case 'Rating':
         _filteredProducts
@@ -139,33 +142,33 @@ class _SearchfieldState extends State<Searchfield> {
 
   /// This has to happen only once per app
   void _initSpeech() async {
-    _speechEnabled = await _speechToText.initialize();
+    // _speechEnabled = await _speechToText.initialize();
     setState(() {});
   }
 
   /// Each time to start a speech recognition session
-  void _startListening() async {
-    await _speechToText.listen(onResult: _onSpeechResult);
-    setState(() {});
-  }
+  // void _startListening() async {
+  //   // await _speechToText.listen(onResult: _onSpeechResult);
+  //   setState(() {});
+  // }
 
   /// Manually stop the active speech recognition session
   /// Note that there are also timeouts that each platform enforces
   /// and the SpeechToText plugin supports setting timeouts on the
   /// listen method.
-  void _stopListening() async {
-    await _speechToText.stop();
-    setState(() {});
-  }
+  // void _stopListening() async {
+  //   // await _speechToText.stop();
+  //   setState(() {});
+  // }
 
   /// This is the callback that the SpeechToText plugin calls when
   /// the platform returns recognized words.
-  void _onSpeechResult(SpeechRecognitionResult result) {
-    setState(() {
-      _lastWords = result.recognizedWords;
-      _searchController.text = _lastWords;
-    });
-  }
+  // void _onSpeechResult(SpeechRecognitionResult result) {
+  //   setState(() {
+  //     _lastWords = result.recognizedWords;
+  //     _searchController.text = _lastWords;
+  //   });
+  // }
 
   Future<void> _requestMicrophonePermission() async {
     final status = await Permission.microphone.request();
@@ -184,9 +187,10 @@ class _SearchfieldState extends State<Searchfield> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>NavigationMenu()));
-          },        
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NavigationMenu()));
+          },
         ),
         title: Row(
           children: <Widget>[
@@ -202,10 +206,10 @@ class _SearchfieldState extends State<Searchfield> {
                         decoration: InputDecoration(
                           hintText: 'What are you looking for?',
                           prefixIcon: Icon(Icons.search, color: Colors.grey),
-                          suffixIcon: IconButton(
-                            onPressed: _speechToText.isNotListening ? _startListening : _stopListening,
-                            icon: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
-                          ),
+                          // suffixIcon: IconButton(
+                          //   onPressed: _speechToText.isNotListening ? _startListening : _stopListening,
+                          //   icon: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
+                          // ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(50.0),
                             borderSide: BorderSide.none,
@@ -249,7 +253,10 @@ class _SearchfieldState extends State<Searchfield> {
               itemCount: _filteredProducts.length,
               itemBuilder: (context, index) {
                 final product = _filteredProducts[index];
-                return ProductPage(product: product, allProducts: _allProducts,);
+                return ProductPage(
+                  product: product,
+                  allProducts: _allProducts,
+                );
               },
             ),
           ),
