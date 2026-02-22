@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gshop/features/shop/model/ProductModel.dart';
 import 'package:gshop/features/shop/screens/UI%20screen/Products/ProuctGridview.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart';
+// import 'package:speech_to_text/speech_recognition_result.dart';
+// import 'package:speech_to_text/speech_to_text.dart';
 
 class ShopSearchScreen extends StatefulWidget {
   final List<Product> products;
@@ -19,7 +19,7 @@ class _ShopSearchScreenState extends State<ShopSearchScreen> {
   String _searchText = '';
   // ignore: unused_field
   String _searchQuery = '';
-  SpeechToText _speechToText = SpeechToText();
+  // SpeechToText _speechToText = SpeechToText();
   // ignore: unused_field
   bool _speechEnabled = false;
   String _lastWords = '';
@@ -38,13 +38,13 @@ class _ShopSearchScreenState extends State<ShopSearchScreen> {
 
   /// This has to happen only once per app
   void _initSpeech() async {
-    _speechEnabled = await _speechToText.initialize();
+    // _speechEnabled = await _speechToText.initialize();
     setState(() {});
   }
 
   /// Each time to start a speech recognition session
   void _startListening() async {
-    await _speechToText.listen(onResult: _onSpeechResult);
+    // await _speechToText.listen(onResult: _onSpeechResult);
     setState(() {});
   }
 
@@ -53,18 +53,18 @@ class _ShopSearchScreenState extends State<ShopSearchScreen> {
   /// and the SpeechToText plugin supports setting timeouts on the
   /// listen method.
   void _stopListening() async {
-    await _speechToText.stop();
+    // await _speechToText.stop();
     setState(() {});
   }
 
   /// This is the callback that the SpeechToText plugin calls when
   /// the platform returns recognized words.
-  void _onSpeechResult(SpeechRecognitionResult result) {
-    setState(() {
-      _lastWords = result.recognizedWords;
-      _searchController.text = _lastWords;
-    });
-  }
+  // void _onSpeechResult(SpeechRecognitionResult result) {
+  //   setState(() {
+  //     _lastWords = result.recognizedWords;
+  //     _searchController.text = _lastWords;
+  //   });
+  // }
 
   Future<void> _requestMicrophonePermission() async {
     final status = await Permission.microphone.request();
@@ -116,14 +116,14 @@ class _ShopSearchScreenState extends State<ShopSearchScreen> {
                         decoration: InputDecoration(
                           hintText: 'What are you looking for?',
                           prefixIcon: Icon(Icons.search, color: Colors.grey),
-                          suffixIcon: IconButton(
-                            onPressed: _speechToText.isNotListening
-                                ? _startListening
-                                : _stopListening,
-                            icon: Icon(_speechToText.isNotListening
-                                ? Icons.mic_off
-                                : Icons.mic),
-                          ),
+                          // suffixIcon: IconButton(
+                            // onPressed: _speechToText.isNotListening
+                            //     ? _startListening
+                            //     : _stopListening,
+                            // icon: Icon(_speechToText.isNotListening
+                            //     ? Icons.mic_off
+                            //     : Icons.mic),
+                          // ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(50.0),
                             borderSide: BorderSide.none,

@@ -41,11 +41,4 @@ class TDeviceUtils {
   double get getScreenWidth {
     return MediaQuery.of(context).size.width;
   }
-
-  int _syed = 0;
-  set setsyed(int val) {
-    _syed = val;
-  }
-
-  get getsyed => _syed;
 }

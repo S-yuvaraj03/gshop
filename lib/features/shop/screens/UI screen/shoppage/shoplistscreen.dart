@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:gshop/common/styles/KCard.dart';
 import 'package:gshop/common/widgets/appDrawer.dart';
 import 'package:gshop/common/widgets/appbar.dart';
@@ -18,28 +17,28 @@ class _ShopListScreenState extends State<ShopListScreen> {
   String? scannedShopId;
 
   // Method to scan QR code and update the scannedShopId state
-  Future<void> scanQRCode(BuildContext context) async {
-    try {
-      final result = await FlutterBarcodeScanner.scanBarcode(
-        '#FF0000', // Color of the scanning line
-        'Cancel', // Text for the cancel button
-        true, // Show the flash icon
-        ScanMode.QR, // Set scan mode to QR
-      );
+  // Future<void> scanQRCode(BuildContext context) async {
+  //   try {
+  //     final result = await FlutterBarcodeScanner.scanBarcode(
+  //       '#FF0000', // Color of the scanning line
+  //       'Cancel', // Text for the cancel button
+  //       true, // Show the flash icon
+  //       ScanMode.QR, // Set scan mode to QR
+  //     );
 
-      if (result != '-1') {
-        print('Scanned QR Code: $result');
+  //     if (result != '-1') {
+  //       print('Scanned QR Code: $result');
 
-        setState(() {
-          scannedShopId = result;
-        });
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error scanning QR code: $e')),
-      );
-    }
-  }
+  //       setState(() {
+  //         scannedShopId = result;
+  //       });
+  //     }
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Error scanning QR code: $e')),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +69,8 @@ class _ShopListScreenState extends State<ShopListScreen> {
               child: ElevatedButton.icon(
                 icon: Icon(Icons.qr_code_scanner),
                 label: Text("Scan QR"),
-                onPressed: () => scanQRCode(context),
+                onPressed: () => (),
+                // scanQRCode(context),
               ),
             ),
           ],
@@ -79,7 +79,6 @@ class _ShopListScreenState extends State<ShopListScreen> {
     );
   }
 }
-
 
 class ShopListBody extends StatelessWidget {
   final String? scannedShopId;
@@ -99,38 +98,42 @@ class ShopListBody extends StatelessWidget {
 
           // Filter shops based on scannedShopId if it is not null
           if (scannedShopId != null && scannedShopId!.isNotEmpty) {
-            shops = shops.where((shop) => shop.shopid == scannedShopId).toList();
+            shops =
+                shops.where((shop) => shop.shopid == scannedShopId).toList();
           }
 
           return shops.isEmpty
               ? Center(child: Text('No shops found for this QR code'))
               : ListView.builder(
-                    itemCount: shops.length,
-                    itemBuilder: (context, index) {
-                      Shop shop = shops[index];
-                      return GestureDetector(
-                        child: ProductCard(
-                          KColor: Colors.white,
-                          KImage: shop.shopeimages.first,
-                          Kcategory: "shopid: ${shop.shopid}",
-                          Ktitle: shop.shopename,
-                          KText1: shop.isDeliveryAvailable == true
-                              ? 'Online shopping'
-                              : 'In-store shopping',
-                          KText2: shop.isOnline == true ? 'Open' : 'Close',
-                          KText3: "${shop.openingtime}--${shop.closingtime}",
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ShopDetailScreen(shop: shop, allShops: shops,),
+                  itemCount: shops.length,
+                  itemBuilder: (context, index) {
+                    Shop shop = shops[index];
+                    return GestureDetector(
+                      child: ProductCard(
+                        KColor: Colors.white,
+                        KImage: shop.shopeimages.first,
+                        Kcategory: "shopid: ${shop.shopid}",
+                        Ktitle: shop.shopename,
+                        KText1: shop.isDeliveryAvailable == true
+                            ? 'Online shopping'
+                            : 'In-store shopping',
+                        KText2: shop.isOnline == true ? 'Open' : 'Close',
+                        KText3: "${shop.openingtime}--${shop.closingtime}",
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ShopDetailScreen(
+                              shop: shop,
+                              allShops: shops,
                             ),
-                          );
-                        },
-                      );
-                    },
-              );
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
         }
         return Center(child: Text('No shops found'));
       },

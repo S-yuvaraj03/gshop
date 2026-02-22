@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "690218005733-08gtsgdbtmiij118af6aoo76ofksoj7p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gshop",
+            "certificate_hash": "ecfadb69de1d97874133596cf1c43db0abd16cbe"
+          }
+        },
+        {
           "client_id": "690218005733-pamjm0d10u3p8e3bbsd2klik9d0qj1lv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -58,6 +66,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "690218005733-95j8l3i4pfhlt4m61r2h04fhpaa3kc29.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shop_app",
+            "certificate_hash": "6d0ec4d80fe2e8f374944dd7ec647a2477e0a2eb"
+          }
+        },
         {
           "client_id": "690218005733-qhsl20vgtnn6k7bur7fmnet44tgvag12.apps.googleusercontent.com",
           "client_type": 3
