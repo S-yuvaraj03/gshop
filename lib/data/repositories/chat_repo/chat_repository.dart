@@ -38,7 +38,6 @@ class ChatRepository {
     );
 
     if (image != null) {
-      // Save image to Firebase Storage and get download url
       final downloadUrl = await StorageRepository().saveImageToStorage(
         image: image,
         messageId: sentMessageId,
@@ -173,7 +172,8 @@ class ChatRepository {
     // Start chat with initial history
     final chat = model.startChat(history: [
       Content.text(initialText),
-      Content.model([TextPart('Great to meet you. What would you like to know?')])
+      Content.model(
+          [TextPart('Great to meet you. What would you like to know?')])
     ]);
 
     // Create and send a new message
